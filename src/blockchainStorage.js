@@ -5,7 +5,7 @@ import {createHash} from 'node:crypto'
 
 
 /* Chemin de stockage des blocks */
-const path = ''
+const path = '../data/blockchain.json'
 
 /**
  * Mes définitions
@@ -23,7 +23,13 @@ const path = ''
  * @return {Promise<any>}
  */
 export async function findBlocks() {
-    // A coder
+    try {
+        const filePath = new URL(path, import.meta.url);
+        const contents = await readFile(filePath, { encoding: 'utf8' });
+        return JSON.parse(contents);
+    } catch (err) {
+        console.error(err.message);
+    }
 }
 
 /**
