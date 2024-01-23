@@ -46,7 +46,15 @@ export async function findBlock(partialBlock) {
  * @return {Promise<Block|null>}
  */
 export async function findLastBlock() {
-    // A coder
+    try {
+        const filePath = new URL(path, import.meta.url);
+        const contents = await readFile(filePath, { encoding: 'utf8' });
+        const jsonFile = JSON.parse(contents);
+        console.log(jsonFile[jsonFile.length-1])
+        return jsonFile[jsonFile.length-1];
+    } catch (err) {
+        console.error(err.message);
+    }
 }
 
 /**
@@ -59,7 +67,8 @@ export async function createBlock(contenu) {
         id : uuid(),
         date : getDate(),
         nom : contenu.nom,
-        don : contenu.don
+        don : contenu.don,
+        hash : createHash('sha256').update(JSON.stringify(findLastBlock())).digest('hex')
     };
     const contents = await findBlocks()
     await writeFile(path, JSON.stringify([...contents,data]), 'utf8');
