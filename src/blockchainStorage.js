@@ -38,7 +38,24 @@ export async function findBlocks() {
  * @return {Promise<Block[]>}
  */
 export async function findBlock(partialBlock) {
-    // A coder
+    try {
+        const filePath = new URL(path, import.meta.url);
+        const contents = await readFile(filePath, { encoding: 'utf8' });
+        const jsonFile = JSON.parse(contents);
+        console.log(jsonFile[jsonFile.length-1])
+        for(let i = 0; i < jsonFile.length; i++){
+            if(jsonFile[i].id === partialBlock){
+                return jsonFile[i];
+            }
+        }
+        const data = {
+            id : "inconnu",
+            etat : "Id inconnu"
+        };
+        return data;
+    } catch (err) {
+        console.error(err.message);
+    }
 }
 
 /**
@@ -50,7 +67,6 @@ export async function findLastBlock() {
         const filePath = new URL(path, import.meta.url);
         const contents = await readFile(filePath, { encoding: 'utf8' });
         const jsonFile = JSON.parse(contents);
-        console.log(jsonFile[jsonFile.length-1])
         return jsonFile[jsonFile.length-1];
     } catch (err) {
         console.error(err.message);
