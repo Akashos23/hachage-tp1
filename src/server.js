@@ -1,6 +1,6 @@
 
 import {createServer} from "node:http"
-import {create, liste} from "./blockchain.js";
+import {create, liste, findBlockByID} from "./blockchain.js";
 import {NotFoundError} from "./errors.js";
 
 createServer(async (req, res) => {
@@ -19,6 +19,10 @@ createServer(async (req, res) => {
                 case 'POST:/blockchain':
                     console.log("Post:blockchain")
                     results = await create(req, res)
+                    break
+                case 'GET:/findBlockByID':
+                    console.log("GET:/findBlockByID");
+                    results = await findBlockByID(req, res)
                     break
                 default :
                     res.writeHead(404)

@@ -26,7 +26,9 @@ export async function findBlocks() {
     try {
         const filePath = new URL(path, import.meta.url);
         const contents = await readFile(filePath, { encoding: 'utf8' });
-        return JSON.parse(contents);
+        return new Promise((resolve,error)=>{
+            resolve(JSON.parse(contents))
+        });
     } catch (err) {
         console.error(err.message);
     }
@@ -42,9 +44,8 @@ export async function findBlock(partialBlock) {
         const filePath = new URL(path, import.meta.url);
         const contents = await readFile(filePath, { encoding: 'utf8' });
         const jsonFile = JSON.parse(contents);
-        console.log(jsonFile[jsonFile.length-1])
         for(let i = 0; i < jsonFile.length; i++){
-            if(jsonFile[i].id === partialBlock){
+            if(jsonFile[i].id === partialBlock.identifiant){
                 return jsonFile[i];
             }
         }
@@ -52,7 +53,9 @@ export async function findBlock(partialBlock) {
             id : "inconnu",
             etat : "Id inconnu"
         };
-        return data;
+        return new Promise((resolve,error)=>{
+            resolve(data)
+        });
     } catch (err) {
         console.error(err.message);
     }
@@ -67,7 +70,9 @@ export async function findLastBlock() {
         const filePath = new URL(path, import.meta.url);
         const contents = await readFile(filePath, { encoding: 'utf8' });
         const jsonFile = JSON.parse(contents);
-        return jsonFile[jsonFile.length-1];
+        return new Promise((resolve,error)=>{
+            resolve(jsonFile[jsonFile.length-1] | null)
+        });
     } catch (err) {
         console.error(err.message);
     }
@@ -88,6 +93,8 @@ export async function createBlock(contenu) {
     };
     const contents = await findBlocks()
     await writeFile(path, JSON.stringify([...contents,data]), 'utf8');
-    return [...contents,data];
+    return new Promise((resolve,error)=>{
+        resolve([...contents,data])
+    });
 }
 
