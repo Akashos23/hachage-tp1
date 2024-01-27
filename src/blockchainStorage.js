@@ -46,7 +46,7 @@ export async function findBlock(partialBlock) {
         const jsonFile = JSON.parse(contents);
         for(let i = 0; i < jsonFile.length; i++){
             if(jsonFile[i].id === partialBlock.identifiant){
-                return jsonFile[i];
+                return new Promise((resolve,error)=>{resolve(jsonFile[i]);})
             }
         }
         const data = {
